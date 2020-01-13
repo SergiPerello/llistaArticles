@@ -55,41 +55,47 @@ public class ArticleForm extends Activity {
 
     private void accept() {
         TextView tv;
-
         tv = findViewById(R.id.edtCodiArticle);
         String codiArticle = tv.getText().toString();
         if (codiArticle.trim().equals("")) {
-            Toast.makeText(this, "CODI ARTICLE ESTA BUIT!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Codi article esta buit!", Toast.LENGTH_SHORT).show();
             return;
         }
-
         tv = findViewById(R.id.edtDescripcio);
         String descripcio = tv.getText().toString();
         if (descripcio.trim().equals("")) {
-            Toast.makeText(this, "DESCRIPCIÓ ESTA BUIT!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Descripció esta buit!", Toast.LENGTH_SHORT).show();
             return;
         }
-
         tv = findViewById(R.id.edtPvp);
         float pvp;
         try {
             pvp = Float.valueOf(tv.getText().toString());
         } catch (Exception e) {
-            Toast.makeText(this, "PVP HA DE SER UN NUMERO", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Pvp ha de ser un numero", Toast.LENGTH_SHORT).show();
             return;
         }
-
         tv = findViewById(R.id.edtEstoc);
         float estoc;
         try {
             estoc = Float.valueOf(tv.getText().toString());
         } catch (Exception e) {
-            Toast.makeText(this, "ESTOC HA DE SER UN NUMERO", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Estoc ha de ser un numero", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // Mirem si estem creant o estem guardant
-        if (idArticle == -1) idArticle = bd.addArticle(codiArticle, descripcio, pvp, estoc);
+        if (idArticle == -1) {
+            tv = findViewById(R.id.edtCodiArticle);
+            Cursor c = bd.checkCodiArticle(tv.getText().toString());
+            if (c.getCount() > 0) {
+                Toast.makeText(this, "Codi ja existent", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if (estoc < 0){
+                Toast.makeText(this, "Estoc ha de ser un numero superior a 0", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            idArticle = bd.addArticle(codiArticle, descripcio, pvp, estoc);
+        }
         else bd.updateArticle(idArticle, codiArticle, descripcio, pvp, estoc);
 
         Intent mIntent = new Intent();
@@ -113,6 +119,7 @@ public class ArticleForm extends Activity {
         TextView tv;
         tv = findViewById(R.id.edtCodiArticle);
         tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.CODIARTICLE)));
+        tv.setEnabled(false);
 
         tv = findViewById(R.id.edtDescripcio);
         tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.DESCRIPCIO)));

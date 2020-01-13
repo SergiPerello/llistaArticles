@@ -1,36 +1,25 @@
 package com.sergames.llistaarticles;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-public class ArticlesAdapter extends ArrayAdapter<Article> {
-    public ArticlesAdapter(Context context, Article[] datos) {
-        super(context, R.layout.listitem_article, datos);
+public class ArticlesAdapter extends android.widget.SimpleCursorAdapter {
+    private MainActivity oTodoListIcon;
+
+    ArticlesAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+        super(context, layout, c, from, to, flags);
+        oTodoListIcon = (MainActivity) context;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        @SuppressLint("ViewHolder") View item = inflater.inflate(R.layout.listitem_article, null);
-
-        Article article = getItem(position);
-
-        TextView lblCodiArticle = item.findViewById(R.id.LblCodiArticle);
-        lblCodiArticle.setText(article.getCodiArticle());
-
-        TextView lblDescripcio = item.findViewById(R.id.LblDescripcio);
-        lblDescripcio.setText(article.getDescripcio());
-
-        TextView lblPvp = item.findViewById(R.id.LblPvp);
-        lblPvp.setText(String.valueOf(article.getPvp()));
-
-        TextView lblEstoc = item.findViewById(R.id.LblEstoc);
-        lblEstoc.setText(String.valueOf(article.getEstoc()));
-
-        return (item);
+        View view = super.getView(position, convertView, parent);
+        Cursor linia = (Cursor) getItem(position);
+        int estoc = linia.getInt(linia.getColumnIndexOrThrow(ArticlesDataSource.ESTOC));
+        if (estoc <= 0) view.setBackgroundColor(Color.parseColor("#FF5533"));
+        else view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        return view;
     }
 }

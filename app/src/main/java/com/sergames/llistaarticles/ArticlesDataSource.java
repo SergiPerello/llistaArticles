@@ -68,15 +68,18 @@ public class ArticlesDataSource {
     }
 
     public Cursor articlesStock() {
-        String query = "SELECT * FROM gestorarticles WHERE stock > ?";
-        String[] args = new String[]{"0"};
-        return dbR.rawQuery(query, args);
+        return dbR.query(table_ARTICLES, new String[]{ID, CODIARTICLE, DESCRIPCIO, PVP, ESTOC},
+                ESTOC + ">?", new String[]{String.valueOf(0)}, null, null, CODIARTICLE);
     }
 
     public Cursor articlesNoStock() {
-        String query = "SELECT * FROM gestorarticles WHERE stock <= ?";
-        String[] args = new String[]{"0"};
-        return dbR.rawQuery(query, args);
+        return dbR.query(table_ARTICLES, new String[]{ID, CODIARTICLE, DESCRIPCIO, PVP, ESTOC},
+                ESTOC + "<=?", new String[]{String.valueOf(0)}, null, null, CODIARTICLE);
+    }
+
+    public Cursor checkCodiArticle(String codi) {
+        return dbR.query(table_ARTICLES, new String[]{ID, CODIARTICLE, DESCRIPCIO, PVP, ESTOC},
+                CODIARTICLE + "=?", new String[]{codi}, null, null, CODIARTICLE);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.sergames.llistaarticles;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,11 +12,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
-
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ArticlesDataSource bd;
     private long idActual;
     private int posActual;
-    private SimpleCursorAdapter scArticles;
+    private ArticlesAdapter scArticles;
     private filterKind filterActual;
 
     @Override
@@ -48,21 +48,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadArticles() {
-
-        // Demanem totes les tasques
         Cursor cursorTasks = bd.articles();
-
-        //TODO: CHECK ADAPTER
-
-        // Now create a simple cursor adapter and set it to display
         scArticles = new ArticlesAdapter(this, R.layout.listitem_article, cursorTasks, from, to, 1);
-        scArticles.oTodoListIcon = this;
-
         filterActual = filterKind.FILTER_ALL;
-
         ListView lv = findViewById(R.id.list);
         lv.setAdapter(scArticles);
-
         lv.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -85,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.btnAdd:
                 addArticle();
+                return true;
+            case R.id.mnuTot:
+                filterTot();
                 return true;
             case R.id.mnuStock:
                 filterStock();
@@ -109,8 +102,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void refreshArticles() {
-        Cursor cursorTasks = bd.articles();
-        scArticles.changeCursor(cursorTasks);
+        Cursor cursor = null;
+        switch (filterActual){
+            case FILTER_ALL:
+                cursor = bd.articles();
+                break;
+            case FILTER_STOCK:
+                cursor = bd.articlesStock();
+                break;
+            case FILTER_NOSTOCK:
+                cursor = bd.articlesNoStock();
+                break;
+        }
+        scArticles.changeCursor(cursor);
         scArticles.notifyDataSetChanged();
     }
 
@@ -132,6 +136,20 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, ACTIVITY_TASK_UPDATE);
     }
 
+    public void deleteArticle(final int _id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Eliminar article?");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                bd.deleteArticle(_id);
+                refreshArticles();
+            }
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
+    }
+
     private void filterTot() {
         Cursor cursorTasks = bd.articles();
         filterActual = filterKind.FILTER_ALL;
@@ -139,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         scArticles.notifyDataSetChanged();
         ListView lv = findViewById(R.id.list);
         lv.setSelection(0);
-        Snackbar.make(findViewById(android.R.id.content), "Tots els articles", Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, "Tots els articles", Toast.LENGTH_SHORT).show();
     }
 
     private void filterStock() {
@@ -149,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         scArticles.notifyDataSetChanged();
         ListView lv = findViewById(R.id.list);
         lv.setSelection(0);
-        Snackbar.make(findViewById(android.R.id.content), "Articles en stock", Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, "Articles en stock", Toast.LENGTH_SHORT).show();
     }
 
     private void filterNoStock() {
@@ -159,6 +177,6 @@ public class MainActivity extends AppCompatActivity {
         scArticles.notifyDataSetChanged();
         ListView lv = findViewById(R.id.list);
         lv.setSelection(0);
-        Snackbar.make(findViewById(android.R.id.content), "Articles en no stock", Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, "Articles en no stock", Toast.LENGTH_SHORT).show();
     }
 }
