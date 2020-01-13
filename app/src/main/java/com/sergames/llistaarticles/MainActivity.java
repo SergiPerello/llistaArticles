@@ -15,26 +15,20 @@ public class MainActivity extends ListActivity {
     private static int ACTIVITY_TASK_ADD = 1;
     private static int ACTIVITY_TASK_UPDATE = 2;
 
-    private static String[] from = new String[]{
-            ArticlesDataSource.CODIARTICLE,
-            ArticlesDataSource.DESCRIPCIO,
-            ArticlesDataSource.PVP,
-            ArticlesDataSource.ESTOC};
-    private static int[] to = new int[]{
-            R.id.LblCodiArticle,
-            R.id.LblDescripcio,
-            R.id.LblPvp,
-            R.id.LblEstoc};
+    private static String[] from = new String[]{ArticlesDataSource.CODIARTICLE, ArticlesDataSource.DESCRIPCIO, ArticlesDataSource.PVP, ArticlesDataSource.ESTOC};
+    private static int[] to = new int[]{R.id.LblCodiArticle, R.id.LblDescripcio, R.id.LblPvp, R.id.LblEstoc};
     private ArticlesDataSource bd;
     private long idActual;
     private int posActual;
     private SimpleCursorAdapter scArticles;
+    private filterKind filterActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Articles");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         Button btn = findViewById(R.id.btnAdd);
         btn.setOnClickListener(new View.OnClickListener() {
 
@@ -43,20 +37,15 @@ public class MainActivity extends ListActivity {
                 addTask();
             }
         });
+
+        setTitle("Articles");
         bd = new ArticlesDataSource(this);
         loadArticles();
     }
 
     private void loadArticles() {
         Cursor cursorTasks = bd.articles();
-
-        scArticles = new SimpleCursorAdapter(this,
-                R.layout.listitem_article,
-                cursorTasks,
-                from,
-                to,
-                1);
-
+        scArticles = new SimpleCursorAdapter(this, R.layout.listitem_article, cursorTasks, from, to, 1);
         setListAdapter(scArticles);
     }
 
