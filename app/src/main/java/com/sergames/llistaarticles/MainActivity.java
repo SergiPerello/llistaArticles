@@ -1,6 +1,5 @@
 package com.sergames.llistaarticles;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,15 +7,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static int ACTIVITY_TASK_ADD = 1;
     private static int ACTIVITY_TASK_UPDATE = 2;
@@ -33,8 +33,6 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         Button btn = findViewById(R.id.btnAdd);
         btn.setOnClickListener(new View.OnClickListener() {
 
@@ -50,20 +48,29 @@ public class MainActivity extends ListActivity {
     }
 
     private void loadArticles() {
-        Cursor cursorArticles = null;
-        switch (filterActual) {
-            case FILTER_ALL:
-                cursorArticles = bd.articles();
-                break;
-            case FILTER_STOCK:
-                cursorArticles = bd.articlesStock();
-                break;
-            case FILTER_NOSTOCK:
-                cursorArticles = bd.articlesNoStock();
-                break;
-        }
-        scArticles.changeCursor(cursorArticles);
-        scArticles.notifyDataSetChanged();
+
+        // Demanem totes les tasques
+        Cursor cursorTasks = bd.articles();
+
+        //TODO: CHECK ADAPTER
+
+        // Now create a simple cursor adapter and set it to display
+        scArticles = new ArticlesAdapter(this, R.layout.listitem_article, cursorTasks, from, to, 1);
+        scArticles.oTodoListIcon = this;
+
+        filterActual = filterKind.FILTER_ALL;
+
+        ListView lv = findViewById(R.id.list);
+        lv.setAdapter(scArticles);
+
+        lv.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                        updateArticle(id);
+                    }
+                }
+        );
     }
 
     @Override
@@ -153,12 +160,5 @@ public class MainActivity extends ListActivity {
         ListView lv = findViewById(R.id.list);
         lv.setSelection(0);
         Snackbar.make(findViewById(android.R.id.content), "Articles en no stock", Snackbar.LENGTH_LONG).show();
-    }
-
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        updateArticle(id);
     }
 }
