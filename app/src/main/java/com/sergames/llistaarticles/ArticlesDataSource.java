@@ -32,14 +32,11 @@ public class ArticlesDataSource {
     }
 
     public Cursor articles() {
-        // Consulta tots els articles
         return dbR.query(table_ARTICLES, new String[]{ID, CODIARTICLE, DESCRIPCIO, PVP, ESTOC},
                 null, null, null, null, ID);
     }
 
     public Cursor article(long id) {
-        // Retorna un cursor només amb el id indicat
-        // Retornem les tasques que el camp DONE = 1
         return dbR.query(table_ARTICLES, new String[]{ID, CODIARTICLE, DESCRIPCIO, PVP, ESTOC},
                 ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null);
@@ -70,5 +67,16 @@ public class ArticlesDataSource {
         dbW.delete(table_ARTICLES, ID + " = ?", new String[]{String.valueOf(id)});
     }
 
+    public Cursor articlesStock() {
+        String query = "SELECT * FROM gestorarticles WHERE stock > ?";
+        String[] args = new String[]{"0"};
+        return dbR.rawQuery(query, args);
+    }
+
+    public Cursor articlesNoStock() {
+        String query = "SELECT * FROM gestorarticles WHERE stock <= ?";
+        String[] args = new String[]{"0"};
+        return dbR.rawQuery(query, args);
+    }
 
 }

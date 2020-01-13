@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mnuTot"
+        android:title="Mostrar tots els articles" />
+    <item
+        android:id="@+id/mnuStock"
+        android:title="Mostrar articles en stock" />
+    <item
+        android:id="@+id/mnuNoStock"
+        android:title="Mostrar articles en no stock" />
+</menu>

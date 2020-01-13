@@ -4,11 +4,17 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toolbar;
 
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends ListActivity {
 
@@ -27,14 +33,14 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Button btn = findViewById(R.id.btnAdd);
         btn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                addTask();
+                addArticle();
             }
         });
 
@@ -44,40 +50,44 @@ public class MainActivity extends ListActivity {
     }
 
     private void loadArticles() {
-        Cursor cursorTasks = bd.articles();
-        scArticles = new SimpleCursorAdapter(this, R.layout.listitem_article, cursorTasks, from, to, 1);
-        setListAdapter(scArticles);
-    }
-
-    private void refreshArticles() {
-
-        // Demanem totes les tasques
-        Cursor cursorTasks = bd.articles();
-
-        // Now create a simple cursor adapter and set it to display
-        scArticles.changeCursor(cursorTasks);
+        Cursor cursorArticles = null;
+        switch (filterActual) {
+            case FILTER_ALL:
+                cursorArticles = bd.articles();
+                break;
+            case FILTER_STOCK:
+                cursorArticles = bd.articlesStock();
+                break;
+            case FILTER_NOSTOCK:
+                cursorArticles = bd.articlesNoStock();
+                break;
+        }
+        scArticles.changeCursor(cursorArticles);
         scArticles.notifyDataSetChanged();
     }
 
-    private void addTask() {
-        // Cridem a l'activity del detall de la tasca enviant com a id -1
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", -1);
-
-        idActual = -1;
-
-        Intent i = new Intent(this, ArticleForm.class);
-        i.putExtras(bundle);
-        startActivityForResult(i, ACTIVITY_TASK_ADD);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_filter, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    private void updateTask(long id) {
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", id);
-        idActual = id;
-        Intent i = new Intent(this, ArticleForm.class);
-        i.putExtras(bundle);
-        startActivityForResult(i, ACTIVITY_TASK_UPDATE);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnAdd:
+                addArticle();
+                return true;
+            case R.id.mnuStock:
+                filterStock();
+                return true;
+            case R.id.mnuNoStock:
+                filterNoStock();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -90,9 +100,65 @@ public class MainActivity extends ListActivity {
         }
     }
 
+
+    private void refreshArticles() {
+        Cursor cursorTasks = bd.articles();
+        scArticles.changeCursor(cursorTasks);
+        scArticles.notifyDataSetChanged();
+    }
+
+    private void addArticle() {
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", -1);
+        idActual = -1;
+        Intent i = new Intent(this, ArticleForm.class);
+        i.putExtras(bundle);
+        startActivityForResult(i, ACTIVITY_TASK_ADD);
+    }
+
+    private void updateArticle(long id) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", id);
+        idActual = id;
+        Intent i = new Intent(this, ArticleForm.class);
+        i.putExtras(bundle);
+        startActivityForResult(i, ACTIVITY_TASK_UPDATE);
+    }
+
+    private void filterTot() {
+        Cursor cursorTasks = bd.articles();
+        filterActual = filterKind.FILTER_ALL;
+        scArticles.changeCursor(cursorTasks);
+        scArticles.notifyDataSetChanged();
+        ListView lv = findViewById(R.id.list);
+        lv.setSelection(0);
+        Snackbar.make(findViewById(android.R.id.content), "Tots els articles", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void filterStock() {
+        Cursor cursorTasks = bd.articlesStock();
+        filterActual = filterKind.FILTER_STOCK;
+        scArticles.changeCursor(cursorTasks);
+        scArticles.notifyDataSetChanged();
+        ListView lv = findViewById(R.id.list);
+        lv.setSelection(0);
+        Snackbar.make(findViewById(android.R.id.content), "Articles en stock", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void filterNoStock() {
+        Cursor cursorTasks = bd.articlesNoStock();
+        filterActual = filterKind.FILTER_NOSTOCK;
+        scArticles.changeCursor(cursorTasks);
+        scArticles.notifyDataSetChanged();
+        ListView lv = findViewById(R.id.list);
+        lv.setSelection(0);
+        Snackbar.make(findViewById(android.R.id.content), "Articles en no stock", Snackbar.LENGTH_LONG).show();
+    }
+
+
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        updateTask(id);
+        updateArticle(id);
     }
 }
