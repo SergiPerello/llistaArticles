@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">llistaArticles</string>
+    <string name="textView">TextView</string>
 </resources>
