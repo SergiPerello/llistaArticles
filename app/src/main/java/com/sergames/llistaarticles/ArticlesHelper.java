@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ArticlesHelper extends SQLiteOpenHelper {
 
     // database version
-    private static final int database_VERSION = 1;
+    private static final int database_VERSION = 2;
 
     // database name
     private static final String database_NAME = "articlesDataBase";
@@ -16,21 +16,31 @@ public class ArticlesHelper extends SQLiteOpenHelper {
         super(context, database_NAME, null, database_VERSION);
     }
 
+    private String CREATE_ARTICLES =
+            "CREATE TABLE articles (" +
+                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "codiArticle TEXT," +
+                    "descripcio TEXT," +
+                    "pvp FLOAT," +
+                    "estoc FLOAT)";
+
+    private String CREATE_MOVIMENTS =
+            "CREATE TABLE moviments (" +
+                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "codiArticle TEXT," +
+                    "dia TEXT," +
+                    "quantitat INTEGER," +
+                    "tipus TEXT," +
+                    "FOREIGN KEY(codiArticle) REFERENCES articles(_id))";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_ARTICLES =
-                "CREATE TABLE articles ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "codiArticle TEXT," +
-                        "descripcio TEXT," +
-                        "pvp FLOAT," +
-                        "estoc FLOAT)";
-
         db.execSQL(CREATE_ARTICLES);
+        db.execSQL(CREATE_MOVIMENTS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // De moment no fem res
-
+        if(oldVersion<2) db.execSQL(CREATE_MOVIMENTS);
     }
 }
