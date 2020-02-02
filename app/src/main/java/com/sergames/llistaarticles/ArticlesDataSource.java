@@ -15,7 +15,7 @@ public class ArticlesDataSource {
 
     public static final String table_MOVIMENT = "moviments";
     public static final String MOV_ID = "_id";
-    public static final String MOV_CODI = "codiArticle";
+    public static final String MOV_CODI = "codi";
     public static final String MOV_DIA = "dia";
     public static final String MOV_QUANTITAT = "quantitat";
     public static final String MOV_TIPUS = "tipus";

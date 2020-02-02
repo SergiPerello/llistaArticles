@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static int ACTIVITY_TASK_UPDATE = 2;
     private static String[] from = new String[]{
             ArticlesDataSource.ART_CODI, ArticlesDataSource.ART_DESCRIPCIO, ArticlesDataSource.ART_PVP, ArticlesDataSource.ART_ESTOC};
-    private static int[] to = new int[]{R.id.LblCodiArticle, R.id.LblDescripcio, R.id.LblPvp, R.id.LblEstoc};
+    private static int[] to = new int[]{R.id.LblCodi, R.id.LblDescripcio, R.id.LblPvp, R.id.LblEstoc};
     LayoutInflater mInflater;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private ArticlesDataSource bd;
@@ -197,20 +197,15 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Articles en no stock", Toast.LENGTH_SHORT).show();
     }
 
-    public void showAlertDialogButtonClicked(View view, String title, final int idLinia, final boolean addingStock) {
-        // create an alert builder
+    public void showAlertDialogButtonClicked(String title, final int idPos, final boolean addingStock) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
-
         final Context context = this.getApplicationContext();
         mInflater = LayoutInflater.from(context);
 
-        // set the custom layout
         @SuppressLint("InflateParams") final View customLayout = mInflater.inflate(R.layout.dialog_input, null);
         builder.setView(customLayout);
-
         final String[] _Date = {""};
-
         final TextView tvDatePicker = customLayout.findViewById(R.id.tvDatePicker);
         tvDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -242,28 +236,22 @@ public class MainActivity extends AppCompatActivity {
                 _Date[0] = date;
             }
         };
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 EditText editText = customLayout.findViewById(R.id.edtNum);
-                if (editText.getText().toString().length() > 5) {
+                if (editText.getText().toString().length() > 5)
                     Toast.makeText(getApplicationContext(), "El número es massa llarg!", Toast.LENGTH_SHORT).show();
-                } else {
-                    sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idLinia);
-                }
+                else
+                    sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idPos);
             }
         });
-
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 return;
             }
         });
-
-        // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -271,11 +259,8 @@ public class MainActivity extends AppCompatActivity {
     public void sendDialogDataToActivity(String stock, String date, boolean addingStock, int idLinia) {
         Cursor item = bd.article(idLinia);
         item.moveToFirst();
-
         int stockUpdate;
-
         if (addingStock) {
-            // AFEGIR STOCK
             bd.addMoviment(
                     item.getString(item.getColumnIndexOrThrow(ArticlesDataSource.MOV_CODI)),
                     date, Integer.parseInt(stock), "Entrada",
@@ -283,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
             );
             stockUpdate = item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_ESTOC)) + Integer.parseInt(stock);
         } else {
-            // TREURE STOCK
             bd.addMoviment(
                     item.getString(item.getColumnIndexOrThrow(ArticlesDataSource.ART_CODI)),
                     date, -Integer.parseInt(stock), "Sortida",
@@ -291,18 +275,12 @@ public class MainActivity extends AppCompatActivity {
             );
             stockUpdate = item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_ESTOC)) - Integer.parseInt(stock);
         }
-
         bd.updateArticle(
                 item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_ID)),
                 item.getString(item.getColumnIndexOrThrow(ArticlesDataSource.ART_CODI)),
                 item.getString(item.getColumnIndexOrThrow(ArticlesDataSource.ART_DESCRIPCIO)),
                 item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_PVP)),
                 stockUpdate);
-
-        /*Cursor movements = bd.movements();
-        movements.moveToFirst();
-        Log.e("@MOVEMENTS", DatabaseUtils.dumpCursorToString(movements));*/
-
         refreshArticles();
     }
 

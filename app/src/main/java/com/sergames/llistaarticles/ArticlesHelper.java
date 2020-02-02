@@ -31,7 +31,7 @@ public class ArticlesHelper extends SQLiteOpenHelper {
                     "dia TEXT," +
                     "quantitat INTEGER," +
                     "tipus TEXT," +
-                    "FOREIGN KEY(codiArticle) REFERENCES articles(_id))";
+                    "FOREIGN KEY(codi) REFERENCES articles(_id))";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
