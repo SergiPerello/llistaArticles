@@ -19,7 +19,7 @@ public class ArticlesHelper extends SQLiteOpenHelper {
     private String CREATE_ARTICLES =
             "CREATE TABLE articles (" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "codiArticle TEXT," +
+                    "codi TEXT," +
                     "descripcio TEXT," +
                     "pvp FLOAT," +
                     "estoc FLOAT)";

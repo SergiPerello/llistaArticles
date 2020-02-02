@@ -6,20 +6,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class ArticlesDataSource {
-    private static final String table_ARTICLES = "articles";
-    private static final String ART_ID = "_id";
-    private static final String ART_CODI = "codi";
-    private static final String ART_DESCRIPCIO = "descripcio";
-    private static final String ART_PVP = "pvp";
-    private static final String ART_ESTOC = "estoc";
+    public static final String table_ARTICLES = "articles";
+    public static final String ART_ID = "_id";
+    public static final String ART_CODI = "codi";
+    public static final String ART_DESCRIPCIO = "descripcio";
+    public static final String ART_PVP = "pvp";
+    public static final String ART_ESTOC = "estoc";
 
-    private static final String table_MOVIMENT = "moviments";
-    private static final String MOV_ID = "_id";
-    private static final String MOV_CODI = "codi";
-    private static final String MOV_DIA = "dia";
-    private static final String MOV_QUANTITAT = "quantitat";
-    private static final String MOV_TIPUS = "tipus";
-    private static final String MOV_ART_ID = "art_id";
+    public static final String table_MOVIMENT = "moviments";
+    public static final String MOV_ID = "_id";
+    public static final String MOV_CODI = "codiArticle";
+    public static final String MOV_DIA = "dia";
+    public static final String MOV_QUANTITAT = "quantitat";
+    public static final String MOV_TIPUS = "tipus";
+    public static final String MOV_ART_ID = "art_id";
 
     private ArticlesHelper dbHelper;
     private SQLiteDatabase dbW, dbR;

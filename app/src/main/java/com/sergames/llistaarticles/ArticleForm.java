@@ -118,17 +118,17 @@ public class ArticleForm extends Activity {
 
         TextView tv;
         tv = findViewById(R.id.edtCodiArticle);
-        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.CODIARTICLE)));
+        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.ART_CODI)));
         tv.setEnabled(false);
 
         tv = findViewById(R.id.edtDescripcio);
-        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.DESCRIPCIO)));
+        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.ART_DESCRIPCIO)));
 
         tv = findViewById(R.id.edtPvp);
-        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.PVP)));
+        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.ART_PVP)));
 
         tv = findViewById(R.id.edtEstoc);
-        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.ESTOC)));
+        tv.setText(datos.getString(datos.getColumnIndex(ArticlesDataSource.ART_ESTOC)));
     }
 
     private void deleteArticle() {
