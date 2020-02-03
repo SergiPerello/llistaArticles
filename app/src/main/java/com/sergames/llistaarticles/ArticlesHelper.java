@@ -27,7 +27,7 @@ public class ArticlesHelper extends SQLiteOpenHelper {
     private String CREATE_MOVIMENTS =
             "CREATE TABLE moviments (" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "codiArticle TEXT," +
+                    "codi TEXT," +
                     "dia TEXT," +
                     "quantitat INTEGER," +
                     "tipus TEXT," +
