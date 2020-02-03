@@ -229,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
-
                 String date = year + "/" + month + "/" + day;
                 String dateEs = day + "/" + month + "/" + year;
                 tvDatePicker.setText(dateEs);

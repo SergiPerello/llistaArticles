@@ -15,7 +15,7 @@
             android:id="@+id/LblCodi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textView"
+            android:text="Codi"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -23,7 +23,7 @@
             android:id="@+id/LblDescripcio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textView"
+            android:text="Descripció"
             android:textSize="14sp"
             android:textStyle="normal" />
 
@@ -31,7 +31,7 @@
             android:id="@+id/LblPvp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textView"
+            android:text="Pvp"
             android:textSize="14sp"
             android:textStyle="normal" />
 
@@ -39,7 +39,7 @@
             android:id="@+id/LblEstoc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textView"
+            android:text="Estoc"
             android:textSize="14sp"
             android:textStyle="normal" />
 
