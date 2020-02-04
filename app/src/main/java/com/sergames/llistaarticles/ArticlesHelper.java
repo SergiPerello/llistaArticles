@@ -27,11 +27,11 @@ public class ArticlesHelper extends SQLiteOpenHelper {
     private String CREATE_MOVIMENTS =
             "CREATE TABLE moviments (" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "codi TEXT," +
                     "dia TEXT," +
                     "quantitat INTEGER," +
                     "tipus TEXT," +
-                    "FOREIGN KEY(codi) REFERENCES articles(_id))";
+                    "articleID INTEGER," +
+                    "FOREIGN KEY(articleID) REFERENCES articles(_id))";
 
     @Override
     public void onCreate(SQLiteDatabase db) {

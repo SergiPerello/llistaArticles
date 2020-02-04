@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/tvDatePicker"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="Sel·lecciona la data"
+        android:textSize="18sp" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"

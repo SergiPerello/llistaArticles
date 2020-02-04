@@ -261,14 +261,12 @@ public class MainActivity extends AppCompatActivity {
         int stockUpdate;
         if (addingStock) {
             bd.addMoviment(
-                    item.getString(item.getColumnIndexOrThrow(ArticlesDataSource.MOV_CODI)),
                     date, Integer.parseInt(stock), "Entrada",
                     item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_ID))
             );
             stockUpdate = item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_ESTOC)) + Integer.parseInt(stock);
         } else {
             bd.addMoviment(
-                    item.getString(item.getColumnIndexOrThrow(ArticlesDataSource.ART_CODI)),
                     date, -Integer.parseInt(stock), "Sortida",
                     item.getInt(item.getColumnIndexOrThrow(ArticlesDataSource.ART_ID))
             );

@@ -15,11 +15,10 @@ public class ArticlesDataSource {
 
     public static final String table_MOVIMENT = "moviments";
     public static final String MOV_ID = "_id";
-    public static final String MOV_CODI = "codi";
     public static final String MOV_DIA = "dia";
     public static final String MOV_QUANTITAT = "quantitat";
     public static final String MOV_TIPUS = "tipus";
-    public static final String MOV_ART_ID = "art_id";
+    public static final String MOV_ARTID = "articleID";
 
     private ArticlesHelper dbHelper;
     private SQLiteDatabase dbW, dbR;
@@ -89,23 +88,22 @@ public class ArticlesDataSource {
 
     /* TAULA MOVIMENTS */
     public Cursor moviments() {
-        return dbR.query(table_MOVIMENT, new String[]{MOV_ID, MOV_CODI, MOV_DIA, MOV_QUANTITAT, MOV_TIPUS, MOV_ART_ID},
+        return dbR.query(table_MOVIMENT, new String[]{MOV_ID, MOV_DIA, MOV_QUANTITAT, MOV_TIPUS, MOV_ARTID},
                 null, null, null, null, MOV_ID);
     }
 
     public Cursor moviment(long id) {
-        return dbR.query(table_MOVIMENT, new String[]{MOV_ID, MOV_CODI, MOV_DIA, MOV_QUANTITAT, MOV_TIPUS, MOV_ART_ID},
-                MOV_ART_ID + "=?", new String[]{String.valueOf(id)}, null, null, MOV_ID);
+        return dbR.query(table_MOVIMENT, new String[]{MOV_ID, MOV_DIA, MOV_QUANTITAT, MOV_TIPUS, MOV_ARTID},
+                MOV_ARTID + "=?", new String[]{String.valueOf(id)}, null, null, null);
     }
 
-    public long addMoviment(String codi, String dia, int quantitat, String tipus, int mov_art_id) {
+    public long addMoviment(String dia, int quantitat, String tipus, int mov_art_id) {
         ContentValues values = new ContentValues();
-        values.put(MOV_CODI, codi);
         values.put(MOV_DIA, dia);
         values.put(MOV_QUANTITAT, quantitat);
         values.put(MOV_TIPUS, tipus);
-        values.put(MOV_ART_ID, mov_art_id);
-        return dbW.insert(table_MOVIMENT,null,values);
+        values.put(MOV_ARTID, mov_art_id);
+        return dbW.insert(table_MOVIMENT, null, values);
     }
 
 }
