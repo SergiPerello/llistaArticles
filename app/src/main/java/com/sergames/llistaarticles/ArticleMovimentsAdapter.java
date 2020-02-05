@@ -14,9 +14,8 @@ class ArticleMovimentsAdapter extends android.widget.SimpleCursorAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final View view = super.getView(position, convertView, parent);
-        final Cursor linia = (Cursor) getItem(position);
-        DateFormatter.format();
-
+        TextView tv = view.findViewById(R.id.LblDia);
+        tv.setText(DateFormatter.format((String) tv.getText()));
         return view;
     }
 }

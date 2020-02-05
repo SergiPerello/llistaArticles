@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button btn = findViewById(R.id.btnAdd);
         btn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 addArticle();
@@ -228,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
                 String date = year + "/" + month + "/" + day;
                 String dateEs = day + "/" + month + "/" + year;
                 tvDatePicker.setText(dateEs);
