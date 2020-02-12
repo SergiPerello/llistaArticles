@@ -29,8 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 import java.util.Objects;
 
-import static android.content.ContentValues.TAG;
-
 public class MainActivity extends AppCompatActivity {
 
     private static int ACTIVITY_TASK_ADD = 1;
@@ -55,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addArticle();
+            }
+        });
+
+        btn = findViewById(R.id.weather);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Weather.class);
+                startActivity(i);
             }
         });
 
